@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">mrsignage_rss_form.rss_form_data_source</item>
+			<item name="deps" xsi:type="string">mrsignage_rss_form.rss_form_data_source</item>
+		</item>
+		<item name="label" translate="true" xsi:type="string">Rss Information</item>
+		<item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+	</argument>
+	<settings>
+		<buttons>
+                <button class="MrSignage\Rss\Block\Adminhtml\Rss\Edit\SaveButton" name="save"/>
+        </buttons>
+        <layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+        <deps>
+            <dep>mrsignage_rss_form.rss_form_data_source</dep>
+        </deps>
+	</settings>
+	<dataSource name="rss_form_data_source">
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+			</item>
+		</argument>
+		<settings>
+            <submitUrl path="*/*/save"/>
+        </settings>
+
+        <dataProvider class="MrSignage\Rss\Model\Rss\DataProvider" name="rss_form_data_source">
+        	<settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+	</dataSource>
+	<fieldset name="general">
+		<settings>
+            <label translate="true">General</label>
+        </settings>
+        <field name="entity_type">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">MrSignage\Rss\Model\ResourceModel\Rss\Collection</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">MrSignage_Rss/js/form/element/options</item>
+					<item name="label" translate="true" xsi:type="string">Select DataType</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">rss</item>
+					<item name="sortOrder" xsi:type="number">15</item>
+					<item name="dataScope" xsi:type="string">entity_type</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="category">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Ui\Component\Product\Form\Categories\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Category</item>
+                    <item name="componentType" xsi:type="string">field</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/new-category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                    <item name="dataScope" xsi:type="string">category</item>
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="showCheckbox" xsi:type="boolean">false</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">false</item>
+                    <item name="levelsVisibility" xsi:type="number">1</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="source" xsi:type="string">rss</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="listens" xsi:type="array">
+                        <item name="${ $.namespace }.${ $.namespace }:responseData" xsi:type="string">setParsed</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="products">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" translate="true" xsi:type="string">Products</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">rss</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataScope" xsi:type="string">products</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+    <htmlContent name="rss_product_content">
+        <block class="MrSignage\Rss\Block\Adminhtml\Product" name="Products">
+             <arguments>
+                <argument name="sort_order" xsi:type="number">100</argument>
+            </arguments>
+        </block>
+    </htmlContent>
+</form>

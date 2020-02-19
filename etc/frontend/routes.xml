@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2020 Brightness Digital Signage BV (Rapvi.com). All rights reserved.
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="mrsignage" frontName="mrsignage">
+            <module name="MrSignage_Rss" />
+        </route>
+    </router>
+</config>

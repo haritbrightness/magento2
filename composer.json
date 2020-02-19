@@ -1,0 +1,30 @@
+{
+  "name": "mrsignage/magento2",
+  "description": "Connect Mrsignage with Magento",
+  "version": "1.0.0",
+  "license": [
+    "AGPL-3.0"
+  ],
+  "support": {
+    "email": "support@mrsingage.com",
+  },
+  "authors": [
+    {
+      "name": "Brightness Digital Signage Solutions B.V",
+      "homepage": "MrSignage.com"
+    }
+  ],
+  "keywords": [
+    "MrSignage",
+    "Signage",
+    "Rss",
+    "Digital signage",
+    "magento 2",
+    "magento2"
+  ],
+  "type": "magento2-module",
+  "autoload": {
+    "psr-4": {"Mrsignage\\Rss\\":""},
+    "files": ["registration.php"]
+  }
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2020 Brightness Digital Signage BV (Rapvi.com). All rights reserved.
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+	<menu>
+		<add id="MrSignage_Rss::catalog" title="MrSignage" module="MrSignage_Rss" sortOrder="51" resource="MrSignage_Rss::catalog"/>
+        <add id="MrSignage_Rss::editcatalog" title="Manage Catalog" module="MrSignage_Rss" sortOrder="10" action="mrsignage/rss/" resource="MrSignage_Rss::post" parent="MrSignage_Rss::catalog"/>
+        <add id="MrSignage_Rss::config" title="Configuration" module="MrSignage_Rss" sortOrder="99" parent="MrSignage_Rss::catalog" action="adminhtml/system_config/edit/section/mrsignage_rss" resource="MrSignage_Rss::config"/>
+	</menu>
+</config>
