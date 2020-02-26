@@ -24,7 +24,7 @@
   ],
   "type": "magento2-module",
   "autoload": {
-    "psr-4": {"Mrsignage\\Rss\\":""},
+    "psr-4": {"MrSignage\\Rss\\":""},
     "files": ["registration.php"]
   }
 }
