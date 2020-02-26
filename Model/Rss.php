@@ -63,6 +63,13 @@ class Rss extends \Magento\Framework\Model\AbstractModel
     protected $storeManager;
 
      /**
+     * galleryReadHandler
+     *
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
+     */
+    protected $galleryReadHandler;
+
+     /**
       * Helper
       *
       * @var \MrSignage\Rss\Helper\Data
@@ -81,6 +88,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Catalog\Model\Product\Visibility                      $productVisibility        productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status         $productStatus            productStatus
      * @param \Magento\Store\Model\StoreManagerInterface                     $storeManager             storeManager
+     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler             $galleryReadHandler       galleryReadHandler
      * @param \Psr\Log\LoggerInterface                                       $logger                   logger
      * @param array                                                          $data                     data
      */
@@ -94,6 +102,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Product\Gallery\ReadHandler $galleryReadHandler,
         \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
@@ -101,6 +110,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
         $this->productVisibility = $productVisibility;
         $this->productStatus = $productStatus;
         $this->storeManager = $storeManager;
+        $this->galleryReadHandler = $galleryReadHandler;
         $this->logger = $logger;
         $this->helper = $helper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -137,14 +147,25 @@ class Rss extends \Magento\Framework\Model\AbstractModel
         
         foreach ($collection as $_product) {
             $product = [];
+            $this->addGallery($_product);
             $product['name'] = $_product->getName(); 
             $product['description'] = $_product->getDescription(); 
             $product['short_description'] = $_product->getShortDescription(); 
             $product['price'] = $this->storeManager->getStore()->getBaseCurrency()->format($_product->getPrice(), [], false);
+            if($_product->getSpecialPrice()){
+                $product['special_price'] = $this->storeManager->getStore()->getBaseCurrency()->format($_product->getSpecialPrice(), [], false);
+            }
+            $product['low_price'] = $this->storeManager->getStore()->getBaseCurrency()->format($_product->getMinimalPrice(), [], false);
             $product['sku'] = $_product->getSku(); 
             $product['url'] = $_product->getProductUrl(); 
             $product['status'] = $_product->getStatus(); 
             $product['image'] = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'catalog/product'.$_product->getImage();
+            $productImages = $_product->getMediaGalleryImages();
+            $images = [];
+            foreach ($productImages as $image) {
+                $images[] = $image->getUrl(); 
+            }
+            $product['images'] = $images;
             $product['stock'] = $_product->getIsSalable();
             $result[] = $product;
         }
@@ -174,6 +195,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
  
         // filter current store products
         $collection->addStoreFilter();
+        $collection->addMinimalPrice();
   
         // set visibility filter
         $collection->setVisibility($this->productVisibility->getVisibleInSiteIds());
@@ -231,6 +253,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
  
         // filter current store products
         $collection->addStoreFilter();
+        $collection->addMinimalPrice();
   
         // set visibility filter
         $collection->setVisibility($this->productVisibility->getVisibleInSiteIds()); 
@@ -240,6 +263,18 @@ class Rss extends \Magento\Framework\Model\AbstractModel
         }
 
         return $collection;       
+    }
+
+    /**
+     * Add Gallery for in product
+     *
+     * @param \Magento\Catalog\Model\Product $product product
+     *
+     * @return null
+    */
+    public function addGallery($product)
+    {
+        $this->galleryReadHandler->execute($product);
     }
 
 
